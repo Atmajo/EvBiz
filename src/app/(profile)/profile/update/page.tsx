@@ -57,7 +57,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen">
+    <div className="flex justify-center items-center w-screen z-0">
       <div className="flex flex-col space-y-10 relative z-20 justify-center items-center mt-48 bg-black bg-opacity-10 backdrop-blur-sm rounded-md w-[300px] md:w-[50%] py-10">
         {user?.imageUrl ? (
           <Image
