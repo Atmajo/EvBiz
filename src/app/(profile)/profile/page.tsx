@@ -4,8 +4,7 @@ import Particles from "@/components/magicui/particles";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AnimatedSubscribeButton } from "@/components/magicui/animated-button";
-import { CheckIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
