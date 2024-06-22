@@ -4,22 +4,17 @@ import Particles from "@/components/magicui/particles";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CheckIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { CheckIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PhoneCall } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { clerkClient, createClerkClient } from "@clerk/nextjs/server";
-import Confetti from "@/components/magicui/confetti";
-import type { ConfettiRef } from "@/components/magicui/confetti";
-import { set } from "react-hook-form";
+import axios from "axios";
 
 const Profile = () => {
   const { user } = useUser();
-
-  const confettiRef = useRef<ConfettiRef>(null);
 
   const [form, setForm] = useState({
     phone: "",
@@ -29,30 +24,17 @@ const Profile = () => {
     imageUrl: "",
   });
 
-  const [confetti, setConfetti] = useState(false);
-
-  useEffect(() => {
-    if (!user) return;
-    setForm((prevState) => ({
-      ...prevState,
-      phone: user?.phoneNumbers[0]?.phoneNumber! || "",
-      name: user?.fullName!,
-      email: user?.emailAddresses[0].emailAddress!,
-      clerkId: user?.id!,
-      imageUrl: user?.imageUrl!,
-    }));
-  }, [user]);
-
   const { toast } = useToast();
 
   async function handleSubmit() {
-    console.log(form);
     try {
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully",
-      });
-      setConfetti(true);
+      const response = await axios.post("/api/users", form);
+      if (response?.data?.message === "User created") {
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        });
+      }
     } catch (error) {
       console.log(error);
       toast({
@@ -60,15 +42,19 @@ const Profile = () => {
         description: "An error occurred while updating your profile",
       });
     } finally {
-      setConfetti(false);
     }
   }
 
-  function handleConfetti() {
-    if (confetti) {
-      confettiRef.current?.fire({});
-    }
-  }
+  const handleChange = (e: any) => {
+    setForm((prevState) => ({
+      ...prevState,
+      phone: e.target.value,
+      name: user?.fullName!,
+      email: user?.emailAddresses[0].emailAddress!,
+      clerkId: user?.id!,
+      imageUrl: user?.imageUrl!,
+    }));
+  };
 
   return (
     <div className="flex justify-center items-center w-screen">
@@ -107,13 +93,7 @@ const Profile = () => {
               </Label>
               <Input
                 className="bg-gray-200/20 border border-black"
-                value={form.phone}
-                onChange={(e) =>
-                  setForm((prevState) => ({
-                    ...prevState,
-                    phone: e.target.value,
-                  }))
-                }
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -125,12 +105,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {confetti && (
-        <Confetti
-          ref={confettiRef}
-          className="absolute left-0 top-0 z-0 h-full w-full"
-        />
-      )}
+
       <Particles
         className="absolute inset-0"
         quantity={500}

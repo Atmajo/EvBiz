@@ -32,8 +32,11 @@ import {
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import EditEvent from "./EditEvent";
+import axios from "axios";
+import { useToast } from "./ui/use-toast";
 
 interface EventCardProps {
+  id: string;
   title: string;
   description?: string;
   date?: string;
@@ -43,6 +46,7 @@ interface EventCardProps {
 }
 
 const Event = ({
+  id,
   title,
   description,
   date,
@@ -51,6 +55,28 @@ const Event = ({
 }: EventCardProps) => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const { toast } = useToast();
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.post("/api/events/delete", { id });
+
+      if (response.data.message === "Event deleted") {
+        toast({
+          title: "Event deleted",
+          description: "Your event has been deleted successfully.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error Occured",
+        description: "Your event has not been deleted.",
+      });
+    }
+  };
+  
   if (isDesktop) {
     return (
       <Card className="w-[350px]">
@@ -64,12 +90,12 @@ const Event = ({
           <p className="text-sm text-muted-foreground">{location}</p>
           <p className="text-sm text-muted-foreground">
             {date}
-            {" @ "}
+            {date ? " @ " : ""}
             {time}
           </p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleDelete}>
             <X size={16} />
           </Button>
           <Dialog open={open} onOpenChange={setOpen}>
@@ -83,7 +109,14 @@ const Event = ({
                 <DialogTitle>Create Event</DialogTitle>
                 <DialogDescription>Edit the following event.</DialogDescription>
               </DialogHeader>
-              <EditEvent />
+              <EditEvent
+                title={title}
+                description={description}
+                id={id}
+                date={date}
+                time={time}
+                location={location}
+              />
             </DialogContent>
           </Dialog>
         </CardFooter>
@@ -108,7 +141,7 @@ const Event = ({
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleDelete}>
           <X size={16} />
         </Button>
         <Drawer open={open} onOpenChange={setOpen}>
@@ -122,7 +155,15 @@ const Event = ({
               <DrawerTitle>Create Event</DrawerTitle>
               <DrawerDescription>Edit the following event.</DrawerDescription>
             </DrawerHeader>
-            <EditEvent className="px-4" />
+            <EditEvent
+              title={title}
+              description={description}
+              id={id}
+              date={date}
+              time={time}
+              location={location}
+              className="px-4"
+            />
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
