@@ -29,6 +29,18 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
+import ProfileAlert from "@/components/Profile-Alert";
+
+interface UserProps {
+  id: string;
+  email: string;
+  name: string | null;
+  clerkId: string | null;
+  imageUrl: string | null;
+  phone: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 function EventForm({ className }: React.ComponentProps<"form">) {
   const [form, setForm] = React.useState({
@@ -53,7 +65,7 @@ function EventForm({ className }: React.ComponentProps<"form">) {
     e.preventDefault();
     try {
       const response = await axios.post("/api/events", form);
-      
+
       if (response) {
         toast({
           title: "Event created",
@@ -68,7 +80,7 @@ function EventForm({ className }: React.ComponentProps<"form">) {
       });
     }
   };
-  
+
   return (
     <form className={cn("grid items-start gap-4", className)}>
       <div className="grid gap-2">
@@ -98,12 +110,31 @@ function EventForm({ className }: React.ComponentProps<"form">) {
 
 const Home = () => {
   const [open, setOpen] = React.useState(false);
+  const [userDetails, setUserDetails] = React.useState<UserProps>({} as UserProps);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const { user } = useUser();
+
+  React.useEffect(() => {
+    async function fetchUser() {
+      const response = await axios.post("/api/users/fetch-user", { clerkId: user?.id! });
+
+      if (response.status === 200) {
+        setUserDetails(response.data);
+      }
+    }
+
+    fetchUser();
+  }, [])
+
+  if (!userDetails) {
+    return <ProfileAlert />
+  }
 
   if (isDesktop) {
     return (
       <div className="px-20 pt-9 w-screen">
-        {/* <ProfileAlert /> */}
+
         <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 mt-0">
           <div className="flex items-center space-x-5 border h-44 w-full rounded-lg px-10 bg-violet-500/30">
             <Pickaxe className="w-12 h-12 rounded-full p-2 text-violet-700" />
