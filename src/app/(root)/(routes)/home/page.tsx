@@ -24,12 +24,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
 import ProfileAlert from "@/components/Profile-Alert";
+import EventForm from "@/components/EventForm";
 
 interface UserProps {
   id: string;
@@ -42,99 +40,38 @@ interface UserProps {
   updatedAt: Date;
 }
 
-function EventForm({ className }: React.ComponentProps<"form">) {
-  const [form, setForm] = React.useState({
-    title: "",
-    description: "",
-    email: "",
-  });
-
-  const { toast } = useToast();
-
-  const { user } = useUser();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-      email: user?.emailAddresses[0].emailAddress!,
-    }));
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("/api/events", form);
-
-      if (response) {
-        toast({
-          title: "Event created",
-          description: "Event has been created successfully",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "An error occured while creating the event",
-      });
-    }
-  };
-
-  return (
-    <form className={cn("grid items-start gap-4", className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="name">Event Name</Label>
-        <Input
-          type="text"
-          id="title"
-          name="title"
-          placeholder="Sommer Fest"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="description">Description</Label>
-        <Input
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Sommer Fest organised in the USA"
-          onChange={handleChange}
-        />
-      </div>
-      <Button onClick={handleSubmit}>Create</Button>
-    </form>
-  );
-}
-
 const Home = () => {
   const [open, setOpen] = React.useState(false);
-  const [userDetails, setUserDetails] = React.useState<UserProps>({} as UserProps);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const [isUser, setIsUser] = React.useState(false);
 
   const { user } = useUser();
 
   React.useEffect(() => {
     async function fetchUser() {
-      const response = await axios.post("/api/users/fetch-user", { clerkId: user?.id! });
+      const response = await axios.post("/api/users/fetch-user", {
+        clerkId: user?.id as string,
+      });
 
-      if (response.status === 200) {
-        setUserDetails(response.data);
+      if (response.data.message === "User not found") {
+        setIsUser(true);
+      } else {
+        setIsUser(false);
       }
+      
     }
-
+    
     fetchUser();
-  }, [])
-
-  if (!userDetails) {
-    return <ProfileAlert />
+  }, []);
+  
+  if (isUser) {
+    return <ProfileAlert />;
   }
-
+  
   if (isDesktop) {
     return (
       <div className="px-20 pt-9 w-screen">
-
         <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 mt-0">
           <div className="flex items-center space-x-5 border h-44 w-full rounded-lg px-10 bg-violet-500/30">
             <Pickaxe className="w-12 h-12 rounded-full p-2 text-violet-700" />

@@ -33,9 +33,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         </NavbarContext.Provider>
       </div>
       <ContentWrapper>
-        <div className="hidden md:flex">
-          <Sidebar />
-        </div>
         {children}
       </ContentWrapper>
       <Toaster />

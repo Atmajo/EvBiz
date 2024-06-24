@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex flex-col justify-center items-center mt-48">
+    <main className="flex flex-col justify-center items-center h-screen">
       <div>
         <Image
           src="https://opendoodles.s3-us-west-1.amazonaws.com/dancing.svg"
