@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, UserButton } from "@clerk/nextjs";
 import { NavData } from "@/data/NavData";
 
 const Navbar = () => {
@@ -16,7 +16,7 @@ const Navbar = () => {
           </Link>
         ))}
         <Button variant="link">
-          <SignOutButton />
+          <UserButton afterSignOutUrl="/sign-in" />
         </Button>
       </div>
     </nav>

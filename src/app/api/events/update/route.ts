@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/client";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
-
 export async function POST(req: Request) {
-  const { id, title, description, date, time, location } = await req.json();
+  const { id, title, description, date, time, location, imageUrl } = await req.json();
 
   try {
     const event = await prisma.event.update({
@@ -14,6 +12,7 @@ export async function POST(req: Request) {
         date,
         time,
         location,
+        imageUrl
       },
       where: {
         id: id,

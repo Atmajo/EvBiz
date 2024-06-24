@@ -19,14 +19,14 @@ const ProfileLayout = ({ children }: { children: ReactNode }) => {
       <div className="hidden fixed top-0 md:flex z-10 ">
         <Navbar />
       </div>
-      <div className="flex md:hidden">
+      <div className="flex md:hidden z-50">
         <NavbarContext.Provider value={{ isOpen, setOpen }}>
           <MobileNavbar />
         </NavbarContext.Provider>
       </div>
       <ContentWrapper>{children}</ContentWrapper>
       <Toaster />
-      <LinearGradient className="absolute z-0" />
+      <LinearGradient className="h-screen" />
     </div>
   );
 };

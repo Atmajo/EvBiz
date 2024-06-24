@@ -1,15 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/client";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   const { title, description, email } = await req.json();
-  
+
   try {
-    const user = await prisma.user.findMany({
+    const user = await prisma.user.findUnique({
       where: {
-        OR:   [{ email: email }],
+        email: email,
       },
     });
 
@@ -18,10 +16,10 @@ export async function POST(req: Request) {
         data: {
           title,
           description,
-          user: { connect: { id: user[0].id } },
+          user: { connect: { id: user.id } },
         },
       });
-
+      
       if (event) {
         return NextResponse.json({ message: "Event created" });
       }

@@ -65,7 +65,7 @@ const LinearGradient = ({
   from = "#00000000",
   to = "rgba(120,119,198,0.3)",
   width = "100%",
-  height = "100%",
+  height = "screen",
   transitionPoint = "50%",
   direction = "bottom",
   className,
@@ -75,7 +75,7 @@ const LinearGradient = ({
     pointerEvents: "none",
     inset: 0,
     width: width,
-    height: height,
+    height: "screen",
     background: `linear-gradient(to ${direction}, ${from}, ${transitionPoint}, ${to})`,
   };
   return <div className={className} style={styles} />;

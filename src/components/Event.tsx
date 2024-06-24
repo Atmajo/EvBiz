@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EllipsisVertical, Forward, Plus, X } from "lucide-react";
+import { EllipsisVertical, Forward, Pencil, Plus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +34,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import EditEvent from "./EditEvent";
 import axios from "axios";
 import { useToast } from "./ui/use-toast";
+import Link from "next/link";
 
 interface EventCardProps {
   id: string;
@@ -58,25 +59,6 @@ const Event = ({
 
   const { toast } = useToast();
 
-  const handleDelete = async () => {
-    try {
-      const response = await axios.post("/api/events/delete", { id });
-
-      if (response.data.message === "Event deleted") {
-        toast({
-          title: "Event deleted",
-          description: "Your event has been deleted successfully.",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      toast({
-        title: "Error Occured",
-        description: "Your event has not been deleted.",
-      });
-    }
-  };
-  
   if (isDesktop) {
     return (
       <Card className="w-[350px]">
@@ -95,13 +77,15 @@ const Event = ({
           </p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={handleDelete}>
-            <X size={16} />
-          </Button>
+          <Link href={"/events/"+id}>
+            <Button variant="ghost">
+              <EllipsisVertical size={16} />
+            </Button>
+          </Link>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost">
-                <EllipsisVertical size={16} />
+              <Button variant="outline">
+                <Pencil size={16} />
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -136,18 +120,20 @@ const Event = ({
         <p className="text-sm text-muted-foreground">{location}</p>
         <p className="text-sm text-muted-foreground">
           {date}
-          {" @ "}
+          {date ? " @ " : ""}
           {time}
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={handleDelete}>
-          <X size={16} />
-        </Button>
+        <Link href={"/events/"+id}>
+          <Button variant="ghost">
+            <EllipsisVertical size={16} />
+          </Button>
+        </Link>
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
-            <Button variant="ghost">
-              <EllipsisVertical size={16} />
+            <Button variant="outline">
+              <Pencil size={16} />
             </Button>
           </DrawerTrigger>
           <DrawerContent>

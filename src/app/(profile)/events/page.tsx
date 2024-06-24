@@ -23,22 +23,23 @@ const EventsPage = () => {
 
   const { user } = useUser();
 
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const response = await axios.post("/api/events/get-events", {
-          clerkId: user?.id!,
-        });
-        const fetchedEvents = Array.isArray(response.data.event)
-          ? response.data.event
-          : [];
-        setEvents(fetchedEvents);
-      } catch (error) {
-        console.log(error);
-      }
+  const fetchData = async () => {
+    try {
+      const response = await axios.post("/api/events/get-events", {
+        clerkId: user?.id!,
+      });
+      const fetchedEvents = Array.isArray(response.data.event)
+        ? response.data.event
+        : [];
+      setEvents(fetchedEvents);
+    } catch (error) {
+      console.log(error);
     }
-    fetchEvents();
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [events]);
 
   return (
     <div className="mt-5">
@@ -47,7 +48,7 @@ const EventsPage = () => {
       </h1>
       <p className="text-muted-foreground">View, share and edit your events.</p>
 
-      <div className="mt-10">
+      <div className="mt-10 w-screen flex space-x-2 overflow-y-scroll">
         {events.length === 0 && (
           <div>
             <p className="text-muted-foreground">No events found.</p>

@@ -13,8 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Invited {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id])
+  clerkId   String   @unique
+  answer    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Event {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String?
   date        String?
@@ -22,16 +32,17 @@ model Event {
   location    String?
   imageUrl    String?
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Invited     Invited[]
 }
 
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
-  clerkId   String?
+  clerkId   String?  @unique
   imageUrl  String?
   phone     String?
   events    Event[]

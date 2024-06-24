@@ -6,7 +6,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
-import { ForwardIcon } from "lucide-react";
+import { ForwardIcon, X } from "lucide-react";
 import axios from "axios";
 import { useState } from "react";
 
@@ -76,6 +76,25 @@ const EditEvent = ({
       ...form,
       [name]: value.length > 0 ? value : data[name],
     });
+  };
+  
+  const handleDelete = async () => {
+    try {
+      const response = await axios.post("/api/events/delete", { id });
+      
+      if (response.data.message === "Event deleted") {
+        toast({
+          title: "Event deleted",
+          description: "Your event has been deleted successfully.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error Occured",
+        description: "Your event has not been deleted.",
+      });
+    }
   };
 
   return (
@@ -154,8 +173,8 @@ const EditEvent = ({
         <Button type="submit" onClick={handleSubmit}>
           Save changes
         </Button>
-        <Button>
-          <ForwardIcon />
+        <Button variant="outline" onClick={handleDelete}>
+          <X size={16} />
         </Button>
       </div>
     </form>

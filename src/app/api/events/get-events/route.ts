@@ -1,13 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/client";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   const { clerkId } = await req.json();
 
   try {
-    const user = await prisma.user.findMany({
+    const user = await prisma.user.findUnique({
       where: {
         clerkId: clerkId,
       },
@@ -19,7 +17,7 @@ export async function POST(req: Request) {
 
     const event = await prisma.event.findMany({
       where: {
-        userId: user[0].id,
+        userId: user.id,
       },
     });
 
