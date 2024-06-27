@@ -3,8 +3,6 @@
 import ContentWrapper from "@/Wrapper/ContentWrapper";
 import MobileNavbar from "@/components/MobileNavbar";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import LinearGradient from "@/components/magicui/linear-gradient";
 import { Toaster } from "@/components/ui/toaster";
 import { NavbarContext } from "@/provider/NavbarContext";
 import {
@@ -36,7 +34,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         {children}
       </ContentWrapper>
       <Toaster />
-      <LinearGradient className="absolute z-0" />
     </div>
   );
 };
