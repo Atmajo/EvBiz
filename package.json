@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^5.7.1",
     "@clerk/nextjs": "^5.1.6",
     "@hookform/resolvers": "^3.6.0",
     "@prisma/client": "^5.15.1",
@@ -27,6 +28,7 @@
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.11",
+    "input-otp": "^1.2.4",
     "lucide-react": "^0.396.0",
     "next": "14.2.4",
     "prisma": "^5.15.1",

@@ -61,7 +61,7 @@ const Event = ({
 
   if (isDesktop) {
     return (
-      <Card className="w-[350px]">
+      <Card className="w-[75%] md:w-[350px]">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             {title}
@@ -77,7 +77,7 @@ const Event = ({
           </p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Link href={"/events/"+id}>
+          <Link href={"/home/"+id}>
             <Button variant="ghost">
               <EllipsisVertical size={16} />
             </Button>
@@ -109,7 +109,7 @@ const Event = ({
   }
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[75%] md:w-[350px]">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           {title}
@@ -125,7 +125,7 @@ const Event = ({
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Link href={"/events/"+id}>
+        <Link href={"/home/"+id}>
           <Button variant="ghost">
             <EllipsisVertical size={16} />
           </Button>

@@ -99,11 +99,11 @@ const SpecificEventPage = ({ params }: { params: { eventId: string } }) => {
       </div>
     </div>
   );
-
+  
   const pathName = usePathname();
 
-  const shareLink = `https://evbiz.vercel.app${pathName}/view?eventId=${params.eventId}`;
-
+  const shareLink = `https://evbiz.atmajo.tech${pathName}/view?eventId=${params.eventId}`;
+  
   const ShareComponent = (
     <div className="px-4 py-6 space-y-4">
       <div className="flex items-center space-x-2">

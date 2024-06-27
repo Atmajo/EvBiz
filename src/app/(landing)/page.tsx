@@ -10,7 +10,7 @@ export default function Home() {
     <main className="flex flex-col justify-center items-center h-screen">
       <div>
         <Image
-          src="https://opendoodles.s3-us-west-1.amazonaws.com/dancing.svg"
+          src="/dancing.svg"
           alt="beanhead"
           width={400}
           height={400}
