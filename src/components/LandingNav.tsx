@@ -1,6 +1,8 @@
+"use client"
 import Link from "next/link";
 import { Button } from "./ui/button";
 import GithubStarCount from "./GithubStars";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const LandingNav = () => {
   return (
@@ -12,7 +14,11 @@ const LandingNav = () => {
         <div>
           {/* <GithubStarCount repoUrl="https://github.com/suman-3/Quick-Bio" /> */}
         </div>
-        <Link href="/sign-in">
+      <SignedIn>
+<UserButton afterSignOutUrl="/" />
+      </SignedIn>
+      <SignedOut>
+      <Link href="/sign-in">
           <Button variant="link" className="text-white">
             Log In
           </Button>
@@ -22,6 +28,7 @@ const LandingNav = () => {
             Register
           </Button>
         </Link>
+      </SignedOut>
       </div>
     </nav>
   );

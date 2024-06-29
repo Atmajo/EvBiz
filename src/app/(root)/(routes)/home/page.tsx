@@ -35,6 +35,11 @@ const Home = () => {
   const [isUser, setIsUser] = React.useState(false);
 
   const { user } = useUser();
+  
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
 
   const fetchData = async () => {
     try {
@@ -50,9 +55,6 @@ const Home = () => {
     }
   };
 
-  React.useEffect(() => {
-    fetchData();
-  }, []);
 
   React.useEffect(() => {
     async function fetchUser() {
