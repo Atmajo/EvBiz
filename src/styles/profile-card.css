@@ -1,0 +1,61 @@
+/* From Uiverse.io by aadium */
+.card {
+  width: 230px;
+  height: max-content;
+  border-radius: 2em;
+  padding: 10px;
+  background-color: #191919;
+  box-shadow: 5px 5px 15px rgb(4, 4, 4), -5px -5px 15px rgb(57, 57, 57);
+}
+
+.profileimage {
+  background-color: transparent;
+  border: none;
+  margin-top: 20px;
+  border-radius: 5em;
+  width: 100px;
+  height: 100px;
+}
+
+.pfp {
+  border-radius: 35em;
+  fill: white;
+}
+
+.Name {
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.socialbar {
+  background-color: #191919;
+  border-radius: 3em;
+  width: 90%;
+  padding: 14px;
+  margin-top: 15px;
+  color: white;
+  box-shadow: 3px 3px 15px rgb(0, 0, 0), -3px -3px 15px rgb(58, 58, 58);
+}
+
+.card a {
+  transition: 0.4s;
+  color: white;
+}
+
+#github:hover {
+  color: #c9510c;
+}
+
+#instagram:hover {
+  color: #d62976;
+}
+
+#facebook:hover {
+  color: #3b5998;
+}
+
+#twitter:hover {
+  color: #00acee;
+}
