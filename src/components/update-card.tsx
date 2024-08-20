@@ -1,8 +1,16 @@
+"use client";
+
 import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 
 import "@/styles/update-card.css";
 import { Skeleton } from "./ui/skeleton";
-import UpadteForn from "./update-form";
+import UpdateForm from "./update-form";
 
 interface UpdateCardProps {
   name: string;
@@ -11,6 +19,38 @@ interface UpdateCardProps {
 }
 
 const UpdateCard = ({ name, img, email }: UpdateCardProps) => {
+  const router = useRouter();
+  const [cookies, setCookie] = useCookies(["phone"]);
+  
+  const formSchema = z.object({
+    phone: z
+      .string()
+      .min(10, {
+        message: "Username must be at least 10 digits.",
+      })
+      .max(10, {
+        message: "Username must be at least 10 digits.",
+      }),
+    github: z.string().url({ message: "Please enter a valid URL." }),
+    fb: z.string().url({ message: "Please enter a valid URL." }),
+    ig: z.string().url({ message: "Please enter a valid URL." }),
+    twitter: z.string().url({ message: "Please enter a valid URL." }),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      phone: "",
+    },
+  });
+  
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Form submitted with values:", values);
+    alert(values);
+    // setCookie("phone", values.phone, { path: "/" });
+    // router.push("/profile/update/verify");
+  }
+  
   return (
     <div className="card">
       <center>
@@ -49,7 +89,7 @@ const UpdateCard = ({ name, img, email }: UpdateCardProps) => {
           )}
         </div>
         <div className="mt-5">
-          <UpadteForn />
+          <UpdateForm />
         </div>
       </center>
     </div>

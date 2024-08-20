@@ -3,7 +3,14 @@ import Link from "next/link";
 import React from "react";
 import { Avatar } from "./ui/avatar";
 import AvatarProf from "./avatar";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "./ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTrigger,
+} from "./ui/sheet";
 import { MenuIcon } from "lucide-react";
 
 const Navbar = () => {
@@ -15,13 +22,13 @@ const Navbar = () => {
       <div className="md:flex items-center gap-10 hidden">
         <Link
           href="/home"
-          className="text-lg font-semibold text-muted-foreground hover:text-accent-foreground"
+          className="text-lg font-semibold hover:text-muted-foreground"
         >
           Home
         </Link>
         <Link
           href="/profile"
-          className="text-lg font-semibold text-muted-foreground hover:text-accent-foreground"
+          className="text-lg font-semibold hover:text-muted-foreground"
         >
           Profile
         </Link>
@@ -32,23 +39,24 @@ const Navbar = () => {
           <SheetTrigger asChild>
             <MenuIcon size={24} />
           </SheetTrigger>
-          <SheetContent className="w-60" side={"left"}>
-            <SheetHeader className="flex justify-start items-start">
-              <h1 className="text-4xl font-extrabold">Menu</h1>
-            </SheetHeader>
+          <SheetContent className="flex flex-col justify-between w-60 bg-[#191919] border-none" side={"left"}>
             <div className="flex flex-col py-5">
-              <Link
-                href="/home"
-                className="text-lg font-semibold text-muted-foreground hover:text-accent-foreground py-5"
-              >
-                Home
-              </Link>
-              <Link
-                href="/profile"
-                className="text-lg font-semibold text-muted-foreground hover:text-accent-foreground py-5"
-              >
-                Profile
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  href="/home"
+                  className="text-lg font-semibold hover:text-muted-foreground py-5"
+                >
+                  Home
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  href="/profile"
+                  className="text-lg font-semibold hover:text-muted-foreground py-5"
+                >
+                  Profile
+                </Link>
+              </SheetClose>
             </div>
             <SheetFooter>
               <AvatarProf />
