@@ -23,8 +23,10 @@ import {
 } from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import axios from 'axios'
 
 import "@/styles/update-card.css";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   otp: z.string().max(10, {
@@ -36,6 +38,8 @@ const UpadteForn = () => {
   const router = useRouter();
   const [cookies] = useCookies(["phone"]);
 
+  const { user } = useUser()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,12 +47,19 @@ const UpadteForn = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    //if verified then:
-    router.push("/profile/update");
+    //verify otp
+    try {
+      const res = await axios.post("/api/mail", { email: user?.emailAddresses[0].emailAddress, msg: "" })
+      if (res.data.msgId) {
+        router.push("/profile/update");
+      } else {
+        console.log("Backend error")
+      }
+    } catch (err) { console.log(err) }
   }
-  
+
   return (
     <section className="flex flex-col justify-center items-center mt-32">
       <div className="card">
