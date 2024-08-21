@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/navar";
+import { Toaster } from "@/components/ui/sonner";
 import { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -8,6 +9,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <main className="" suppressHydrationWarning>
       <Navbar />
       {children}
+      <Toaster />
     </main>
   );
 }

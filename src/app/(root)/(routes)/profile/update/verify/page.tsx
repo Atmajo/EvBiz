@@ -23,10 +23,13 @@ import {
 } from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
-import axios from 'axios'
+import axios from "axios";
 
 import "@/styles/update-card.css";
 import { useUser } from "@clerk/nextjs";
+import { otps } from "@/components/otp-gen/otps";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   otp: z.string().max(10, {
@@ -36,9 +39,9 @@ const formSchema = z.object({
 
 const UpadteForn = () => {
   const router = useRouter();
-  const [cookies] = useCookies(["phone"]);
+  const [cookies] = useCookies(["phone", "otp"]);
 
-  const { user } = useUser()
+  const { user } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,17 +51,24 @@ const UpadteForn = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(cookies.otp);
     //verify otp
-    try {
-      const res = await axios.post("/api/mail", { email: user?.emailAddresses[0].emailAddress, msg: "" })
-      if (res.data.msgId) {
-        router.push("/profile/update");
-      } else {
-        console.log("Backend error")
-      }
-    } catch (err) { console.log(err) }
+    if (String(values.otp).trim() === String(cookies.otp).trim()) {
+      toast("OTP Verified");
+      setTimeout(() => {
+        router.push("/profile");
+      }, 500);
+    } else {
+      toast.error("Invalid OTP", {
+        action: {
+          label: "Okay",
+          onClick: () => toast.dismiss(),
+        },
+      });
+    }
   }
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <section className="flex flex-col justify-center items-center mt-32">
@@ -88,9 +98,16 @@ const UpadteForn = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" variant={"secondary"}>
-                Submit
-              </Button>
+              {!isSubmitting ? (
+                <Button type="submit" variant={"secondary"}>
+                  Submit
+                </Button>
+              ) : (
+                <Button type="submit" variant={"secondary"}>
+                  <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                  Please Wait
+                </Button>
+              )}
             </form>
           </Form>
         </div>
